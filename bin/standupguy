@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+require "standupguy"
+require "optparse"
+require "launchy"
+
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: sug [options]"
+
+  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+    options[:verbose] = v
+  end
+
+  opts.on("-r", "--report=FORMAT", "Show an HTML report") do |r|
+    options[:report] = r
+  end
+
+  opts.on("-d", "--date=YYYY-MM-DD", "Date of standup")
+end.parse!
+
+item = ARGV.slice!(0)
+
+unless options[:report]
+  new_item = StandUpGuy::Item.new
+  new_item.add_to_today(item)
+  new_item.save
+  report = StandUpGuy::TextReport.new
+  report.show
+else
+  report = begin
+    case options[:report] 
+    when "HTML"
+      StandUpGuy::HTMLReport.new
+    when "TEXT"
+      StandUpGuy::TextReport.new
+    end
+  end
+  report.show 
+end

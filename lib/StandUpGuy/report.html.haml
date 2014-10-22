@@ -1,0 +1,6 @@
+%html
+  - standup.keys.each do |date|
+    %span="Date: #{date}"
+    %ul
+      - standup[date].each do |i|
+        %li=i["description"]
