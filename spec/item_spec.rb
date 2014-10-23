@@ -26,7 +26,7 @@ describe StandUpGuy::Item do
         item.add_to_today("foob")
         expect(item.data[:description]).to match(/foob/)
         expect(item.data[:name]).to match(`whoami`.chop)
-        expect(item.data[:date]).to match(item.key)
+        expect(item.data[:date]).to match(key)
       end
     end
   end

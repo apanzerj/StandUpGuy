@@ -5,6 +5,28 @@ require "haml"
 require "launchy"
 
 module StandUpGuy
+  module DataMethods
+    def date_key(date=:today)
+      return DateTime.now.strftime("%Y-%m-%d") if date==:today
+      return DateTime.strptime(date,"%Y-%m-%d") if date.is_a?(String)
+    end
+
+    def filename
+      "standup.json"
+    end
+
+    def load_data
+      `touch standup.json` unless File.exists?(filename)
+      @current_standup = JSON.load(File.open(filename))
+    end
+
+    def write_data(current_standup)
+      File.open(filename, "w") do |f|
+        f << JSON.dump(current_standup)
+      end
+    end
+  end
+
   class Report
 
     attr_accessor :current_standup
@@ -56,6 +78,8 @@ module StandUpGuy
   end
 
   class Item
+    include DataMethods
+
     attr_accessor :data
 
     def method_missing(method, *args, &block)
@@ -70,14 +94,11 @@ module StandUpGuy
     end
 
     def save
-      `touch standup.json` unless File.exists?(filename)
-      current_standup = JSON.load(File.open(filename))
-      current_standup ||= {key =>[]}
-      current_standup[key] = [] unless current_standup.keys.include?(key)
-      current_standup[key] << @data
-      File.open(filename, "w") do |f|
-        f << JSON.dump(current_standup)
-      end
+      current_standup = load_data
+      current_standup ||= {date_key =>[]}
+      current_standup[date_key] = [] unless current_standup.keys.include?(date_key)
+      current_standup[date_key] << @data
+      write_data(current_standup)
     end
 
     def add_to_today(item)
@@ -116,11 +137,6 @@ module StandUpGuy
       def valid?
         !(self.id.nil? && self.subdomain.nil?)
       end
-    end
-
-    def key(date=:today)
-      return DateTime.now.strftime("%Y-%m-%d") if date==:today
-      return DateTime.strptime(date,"%Y-%m-%d") if date.is_a?(String)
     end
   end
 end
