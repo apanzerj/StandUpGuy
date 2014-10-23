@@ -36,7 +36,7 @@ module StandUpGuy
       File.write(file, render)
       self.file.close
       Launchy.open self.link
-      sleep 5
+      Kernel.sleep 5
       self.file.unlink
     end
 

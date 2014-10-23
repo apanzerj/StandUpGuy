@@ -25,11 +25,16 @@ describe StandUpGuy::Report do
     end
   end
 
-  describe "#show" do
-    [:html, :txt].each do |format|
+  [:html, :txt].each do |format|
+    describe "#show" do
       subject(:report) do
-        StandUpGuy::HTMLReport.new if format == :html
-        StandUpGuy::TextReport.new if format == :txt
+        format == :html ? StandUpGuy::HTMLReport.new : StandUpGuy::TextReport.new
+      end
+
+      before do
+        Launchy.stubs(:open)
+        Kernel.stubs(:sleep)
+        StandUpGuy::TextReport.send(:define_method, :puts) { |*args| ""}
       end
 
       describe format.to_s do
@@ -41,7 +46,7 @@ describe StandUpGuy::Report do
         describe "#render" do
           it "renders a HAML template" do
             @file = "= key"
-            report.expects(:template).with("report.#{format.to_s}.haml").returns(@file)
+            report.expects(:template).with("report.#{format}.haml").returns(@file)
             expect(report.render).to match(key)
           end
 
