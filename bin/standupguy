@@ -8,18 +8,16 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: sug [options]"
 
-  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
-    options[:verbose] = v
-  end
-
   opts.on("-r", "--report=FORMAT", "Show an HTML report") do |r|
     options[:report] = r
   end
 
-  opts.on("-d", "--date=[YYYY-MM-DD|all]", "Date of standup")
+  opts.on("-d", "--date=YYYY-MM-DD", "Date of standup, ALL for all") do |date|
+    options[:date] = date
+  end
 end.parse!
 
-item = ARGV.slice!(0)
+item = ARGV.join(" ")
 
 unless options[:report]
   new_item = StandUpGuy::Item.new
@@ -31,10 +29,10 @@ else
   report = begin
     case options[:report] 
     when "HTML"
-      StandUpGuy::HTMLReport.new
+      StandUpGuy::HTMLReport.new(options[:date])
     when "TEXT"
-      StandUpGuy::TextReport.new
+      StandUpGuy::TextReport.new(options[:date])
     end
   end
-  report.show 
+  report.show
 end

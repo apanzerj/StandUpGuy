@@ -28,11 +28,11 @@ module StandUpGuy
   end
 
   class Report
+    attr_accessor :current_standup, :date
 
-    attr_accessor :current_standup
-
-    def initialize
+    def initialize(date = nil)
       @current_standup = JSON.load(File.open(filename))
+      @date = date
     end
 
     def file
@@ -51,6 +51,12 @@ module StandUpGuy
     def template(file)
       File.read(File.join(`pwd`.chop, "lib", "StandUpGuy", file))
     end
+
+    def data(date=nil)
+      scope = @current_standup
+      scope = {date.to_sym => @current_standup[date]} unless date.nil?
+      scope
+    end
   end
 
   class HTMLReport < Report
@@ -63,7 +69,7 @@ module StandUpGuy
     end
 
     def render
-      ::Haml::Engine.new(template("report.html.haml")).render(Object.new, :standup => @current_standup)
+      ::Haml::Engine.new(template("report.html.haml")).render(Object.new, :standup => data(@date))
     end
   end
 
@@ -73,7 +79,7 @@ module StandUpGuy
     end
 
     def render
-      ::Haml::Engine.new(template("report.txt.haml")).render(Object.new, :standup => @current_standup)
+      ::Haml::Engine.new(template("report.txt.haml")).render(Object.new, :standup => data(@date))
     end
   end
 

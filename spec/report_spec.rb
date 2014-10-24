@@ -25,6 +25,19 @@ describe StandUpGuy::Report do
     end
   end
 
+  describe "#data" do
+    let(:report) { StandUpGuy::Report.new }
+
+    it "returns the current_standup without a date" do
+      expect(report.data).to be(report.current_standup)
+    end
+
+    it "returns scoped data when passed a date" do
+      report.instance_variable_set(:@current_standup, {"2014-10-10"=>["foo"], "2014-10-11"=>[nil]})
+      expect(report.data("2014-10-10").first).to eq([:"2014-10-10", ["foo"]])
+    end
+  end
+
   [:html, :txt].each do |format|
     describe "#show" do
       subject(:report) do
@@ -56,5 +69,10 @@ describe StandUpGuy::Report do
         end
       end
     end
+  end
+
+  after do
+    @datafile.close
+    @datafile.unlink
   end
 end
