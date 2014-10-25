@@ -1,27 +1,28 @@
 [![Coverage Status](https://img.shields.io/coveralls/apanzerj/StandUpGuy.svg)](https://coveralls.io/r/apanzerj/StandUpGuy) ![Test Status](https://travis-ci.org/apanzerj/StandUpGuy.svg?branch=master)
+
 # StandUpGuy
 
-TODO: Write a gem description
+Quickly and easily manage your daily standup from the command line.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'StandUpGuy'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+Install it yourself as:
 
     $ gem install StandUpGuy
 
 ## Usage
+  
+### Adding an item
 
-TODO: Write usage instructions here
+    $ standupguy https://foo.zendesk.com/tickets/2
+
+    $ standupguy I did a thing today
+
+### Viewing your standup
+
+    $ standupguy --report TEXT
+
+    $ standupguy --report HTML
 
 ## Contributing
 
