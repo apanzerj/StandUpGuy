@@ -17,22 +17,6 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-item = ARGV.join(" ")
+options.merge!(:item => ARGV.join(" "))
 
-unless options[:report]
-  new_item = StandUpGuy::Item.new
-  new_item.add_to_today(item)
-  new_item.save
-  report = StandUpGuy::TextReport.new
-  report.show
-else
-  report = begin
-    case options[:report] 
-    when "HTML"
-      StandUpGuy::HTMLReport.new(options[:date])
-    when "TEXT"
-      StandUpGuy::TextReport.new(options[:date])
-    end
-  end
-  report.show
-end
+StandUpGuy::Core.new(options)

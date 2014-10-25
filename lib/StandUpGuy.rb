@@ -32,6 +32,32 @@ module StandUpGuy
     end
   end
 
+  class Core
+    def initialize(options)
+
+      if options[:item]
+        item = StandUpGuy::Item.new
+        item.add_to_today(options[:item])
+        item.save
+        date = DateTime.now.strftime("%Y-%m-%d")
+        options = {:report => "TEXT", :date => date}.merge(options)
+      end
+
+      report = begin
+        case options[:report] 
+        when "HTML"
+          StandUpGuy::HTMLReport.new(options[:date])
+        when "TEXT"
+          StandUpGuy::TextReport.new(options[:date])
+        else
+          nil
+        end
+      end
+      report.show if report
+
+    end
+  end
+
   class Report
     include DataMethods
     attr_accessor :current_standup, :date
