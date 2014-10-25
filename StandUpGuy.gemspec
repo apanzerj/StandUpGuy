@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Adam Panzer"]
   spec.email         = ["apanzerj@gmail.com"]
   spec.summary       = %q{Manage your StandUp quickly and easily}
-  spec.description   = %q{Integrating with Zendesk and Jira. Manage your daily StandUp report easily.}
+  spec.description   = %q{Integrating with Zendesk. Manage your daily StandUp report easily.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
