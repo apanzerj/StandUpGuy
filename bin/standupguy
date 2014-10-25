@@ -12,7 +12,7 @@ OptionParser.new do |opts|
     options[:report] = r
   end
 
-  opts.on("-d", "--date=YYYY-MM-DD", "Date of standup, ALL for all") do |date|
+  opts.on("-d", "--date=YYYY-MM-DD", "Date of standup. ALL for all") do |date|
     options[:date] = date
   end
 end.parse!

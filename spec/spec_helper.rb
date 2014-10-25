@@ -29,10 +29,17 @@ def expect_zendesk(subdomain, endpoint)
   stub_request(:get, %r{#{subdomain}.zendesk.com.#{endpoint}})
 end
 
-def create_test_file!
-  datafile = Tempfile.new(["standup", ".json"], File.join(`pwd`.chop, "test"))
-  StandUpGuy::Item.any_instance.stubs(:filename).returns(datafile.path)
-  StandUpGuy::Report.any_instance.stubs(:filename).returns(datafile.path)
+def create_test_file!(temp_file = true)
+  datafile = Tempfile.new(["standup", ".json"], File.join(`pwd`.chop, "test")) if temp_file
+  datafile ||= File.join(`pwd`.chop, "test", "standup.json")
+  stub_filename(datafile)
+end
+
+def stub_filename(datafile)
+  path = datafile.is_a?(String) ? datafile : datafile.path
+  StandUpGuy::DataMethods.stubs(:filename).returns(path)
+  StandUpGuy::Report.any_instance.stubs(:filename).returns(path)
+  StandUpGuy::Item.any_instance.stubs(:filename).returns(path)
   datafile
 end
 

@@ -7,8 +7,13 @@ require "launchy"
 module StandUpGuy
   module DataMethods
     def date_key(date=:today)
-      return DateTime.now.strftime("%Y-%m-%d") if date==:today
-      return DateTime.strptime(date,"%Y-%m-%d") if date.is_a?(String)
+      begin
+        date = date == :today ? DateTime.now : DateTime.strptime(date,"%Y-%m-%d")
+        date.strftime("%Y-%m-%d")
+      rescue ArgumentError
+        date = :today
+        retry
+      end
     end
 
     def filename
@@ -16,7 +21,7 @@ module StandUpGuy
     end
 
     def load_data
-      `touch standup.json` unless File.exists?(filename)
+      `touch #{filename}` unless File.exists?(filename)
       @current_standup = JSON.load(File.open(filename))
     end
 
@@ -28,20 +33,17 @@ module StandUpGuy
   end
 
   class Report
+    include DataMethods
     attr_accessor :current_standup, :date
 
     def initialize(date = nil)
       @current_standup = JSON.load(File.open(filename))
-      @date = date
+      date ||= "ALL"
+      @date = date == "ALL" ? :all : date_key(date)
     end
 
     def file
       @file ||= Tempfile.new(["report", ".html"])
-    end
-
-    def filename
-      # This is for testing only. Oy.
-      "standup.json"
     end
 
     def link
@@ -52,9 +54,9 @@ module StandUpGuy
       File.read(File.join(`pwd`.chop, "lib", "StandUpGuy", file))
     end
 
-    def data(date=nil)
+    def data(date = :all)
       scope = @current_standup
-      scope = {date.to_sym => @current_standup[date]} unless date.nil?
+      scope = {date.to_sym => @current_standup[date]} unless date == :all
       scope
     end
   end
@@ -92,11 +94,6 @@ module StandUpGuy
       return unless [:description=, :name=, :date=].include?(method)
       method = method.to_s.chop.to_sym
       @data[method]=args.first
-    end
-
-    def filename
-      # This is for testing only. Oy.
-      "standup.json"
     end
 
     def save
