@@ -30,7 +30,6 @@ describe StandUpGuy::DataMethods do
       @file = File.join(`pwd`.chop, "test", "standup.json")
       File.delete(@file) if File.exists?(@file)
       stubs(:filename => @file)
-      @file = create_test_file!(false)
     end
 
     it "creates a file" do      
@@ -44,6 +43,20 @@ describe StandUpGuy::DataMethods do
       File.write(@file, '{"foo": "bar"}')
       expect(load_data).to eq({"foo" => "bar"})
       File.delete(File.join(`pwd`.chop, "test", "standup.json"))
+    end
+  end
+
+  describe "#write_data" do
+    before do
+      @file = File.join(`pwd`.chop, "test", "standup.json")
+      File.delete(@file) if File.exists?(@file)
+      stubs(:filename => @file)
+    end
+
+    it "writes the current standup" do
+      write_data({"foo" => "bar"})
+      expect(File.read(@file)).to eq('{"foo":"bar"}')
+      File.delete(@file)
     end
   end
 end
