@@ -1,3 +1,5 @@
+[![Coverage Status](https://img.shields.io/coveralls/apanzerj/StandUpGuy.svg)](https://coveralls.io/r/apanzerj/StandUpGuy)
+
 # StandUpGuy
 
 TODO: Write a gem description
