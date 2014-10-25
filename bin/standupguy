@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 require "standupguy"
 require "optparse"
-require "launchy"
 
 options = {}
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: sug [options]"
+  opts.banner = "Usage: standupguy [options]"
 
   opts.on("-r", "--report=FORMAT", "Show an HTML report") do |r|
     options[:report] = r
