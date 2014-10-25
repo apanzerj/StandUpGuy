@@ -1,4 +1,4 @@
-[![Coverage Status](https://img.shields.io/coveralls/apanzerj/StandUpGuy.svg)](https://coveralls.io/r/apanzerj/StandUpGuy) ![Test Status](https://travis-ci.org/apanzerj/StandUpGuy.svg?branch=master)
+[![Coverage Status](https://img.shields.io/coveralls/apanzerj/StandUpGuy.svg)](https://coveralls.io/r/apanzerj/StandUpGuy) [![Test Status](https://travis-ci.org/apanzerj/StandUpGuy.svg?branch=master)](https://travis-ci.org/apanzerj/StandUpGuy)
 
 # StandUpGuy
 
