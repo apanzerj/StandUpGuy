@@ -82,7 +82,7 @@ module StandUpGuy
 
     def data(date = :all)
       scope = @current_standup
-      scope = {date.to_sym => @current_standup[date]} unless date == :all
+      scope = {date => @current_standup[date]} unless date == :all
       scope
     end
   end
@@ -108,6 +108,17 @@ module StandUpGuy
 
     def render
       ::Haml::Engine.new(template("report.txt.haml")).render(Object.new, :standup => data(@date))
+    end
+  end
+
+  class EmailReport < TextReport
+    def show
+      @date = !date.nil? ? date : date_key(:today)
+      body = render
+      case os = Launchy::Detect::HostOs.new().host_os
+      when os =~ /darwin/i
+        Kernel.system('open "mailto:?subject=StandUp for #{date_key(:today)}&body=#{body}"')
+      end
     end
   end
 

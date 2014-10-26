@@ -34,19 +34,24 @@ describe StandUpGuy::Report do
 
     it "returns scoped data when passed a date" do
       report.instance_variable_set(:@current_standup, {"2014-10-10"=>["foo"], "2014-10-11"=>[nil]})
-      expect(report.data("2014-10-10").first).to eq([:"2014-10-10", ["foo"]])
+      expect(report.data("2014-10-10").first).to eq(["2014-10-10", ["foo"]])
     end
   end
 
-  [:html, :txt].each do |format|
+  [:html, :txt, :email].each do |format|
     describe "#show" do
       subject(:report) do
-        format == :html ? StandUpGuy::HTMLReport.new : StandUpGuy::TextReport.new
+        case format
+        when :html then StandUpGuy::HTMLReport.new
+        when :txt then StandUpGuy::TextReport.new
+        when :email then StandUpGuy::EmailReport.new
+        end
       end
 
       before do
         Launchy.stubs(:open)
         Kernel.stubs(:sleep)
+        Kernel.stubs(:system)
         StandUpGuy::TextReport.send(:define_method, :puts) { |*args| ""}
       end
 
@@ -59,7 +64,13 @@ describe StandUpGuy::Report do
         describe "#render" do
           it "renders a HAML template" do
             @file = "= key"
-            report.expects(:template).with("report.#{format}.haml").returns(@file)
+            if format == :email
+              # email template uses txt template
+              fmt = :txt 
+            else
+              fmt = format
+            end
+            report.expects(:template).with("report.#{fmt}.haml").returns(@file)
             expect(report.render).to match(key)
           end
 
