@@ -50,6 +50,7 @@ describe StandUpGuy::Report do
 
       before do
         Launchy.stubs(:open)
+        StandUpGuy::EmailReport.any_instance.stubs(:mac?).returns(true)
         Kernel.stubs(:sleep)
         Kernel.stubs(:system)
         StandUpGuy::TextReport.send(:define_method, :puts) { |*args| ""}
@@ -64,13 +65,7 @@ describe StandUpGuy::Report do
         describe "#render" do
           it "renders a HAML template" do
             @file = "= key"
-            if format == :email
-              # email template uses txt template
-              fmt = :txt 
-            else
-              fmt = format
-            end
-            report.expects(:template).with("report.#{fmt}.haml").returns(@file)
+            report.expects(:template).with("report.#{format}.haml").returns(@file)
             expect(report.render).to match(key)
           end
 

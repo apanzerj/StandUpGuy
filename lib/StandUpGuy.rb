@@ -115,10 +115,15 @@ module StandUpGuy
     def show
       @date = !date.nil? ? date : date_key(:today)
       body = render
-      case os = Launchy::Detect::HostOs.new().host_os
-      when os =~ /darwin/i
-        Kernel.system('open "mailto:?subject=StandUp for #{date_key(:today)}&body=#{body}"')
-      end
+      Kernel.system('open "mailto:?subject=StandUp for #{date_key(:today)}&body=#{body}"') if mac?
+    end
+
+    def render
+      ::Haml::Engine.new(template("report.email.haml")).render(Object.new, :standup => data(@date))
+    end
+
+    def mac?
+      Launchy::Detect::HostOs.new().host_os.start_with?("darwin")
     end
   end
 
