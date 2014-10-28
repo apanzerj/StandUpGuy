@@ -21,6 +21,7 @@ module StandUpGuy
     end
 
     def load_data
+      # TODO: Make thie File.write(filename, "") for more compatibility
       `touch #{filename}` unless File.exists?(filename)
       @current_standup = JSON.load(File.open(filename))
     end
@@ -69,6 +70,7 @@ module StandUpGuy
     end
 
     def file
+      # TODO Move this to HTMLReport
       @file ||= Tempfile.new(["report", ".html"])
     end
 
@@ -77,6 +79,7 @@ module StandUpGuy
     end
 
     def template(file)
+      # TODO This doesn't work outside of gem dir.
       File.read(File.join(`pwd`.chop, "lib", "StandUpGuy", file))
     end
 

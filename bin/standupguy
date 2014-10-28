@@ -16,6 +16,6 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-options.merge!(:item => ARGV.join(" "))
+options.merge!(:item => ARGV.join(" ")) unless ARGV.empty?
 
 StandUpGuy::Core.new(options)
