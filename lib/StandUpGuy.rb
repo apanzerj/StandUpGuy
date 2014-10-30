@@ -17,12 +17,10 @@ module StandUpGuy
     end
 
     def filename
-      "standup.json"
+      File.join(StandUpGuy::Core::DATA_ROOT, "standup.json")
     end
 
     def load_data
-      # TODO: Make thie File.write(filename, "") for more compatibility
-      `touch #{filename}` unless File.exists?(filename)
       @current_standup = JSON.load(File.open(filename))
     end
 
@@ -34,8 +32,10 @@ module StandUpGuy
   end
 
   class Core
+    DATA_ROOT = File.join(ENV["HOME"], ".standupguy")
     def initialize(options)
-
+      @report_available = true
+      first_time! unless Dir.exists?(DATA_ROOT)
       if options[:item]
         item = StandUpGuy::Item.new
         item.add_to_today(options[:item])
@@ -43,7 +43,6 @@ module StandUpGuy
         date = DateTime.now.strftime("%Y-%m-%d")
         options = {:report => "TEXT", :date => date}.merge(options)
       end
-
       report = begin
         case options[:report] 
         when "HTML"
@@ -54,8 +53,15 @@ module StandUpGuy
           nil
         end
       end
-      report.show if report
+      Kernel.puts("Not showing report, not data.") unless @report_available
+      report.show if report && @report_available
+    end
 
+    def first_time!
+      Kernel.puts("First time running...\nCreating data directory")
+      Dir.mkdir(DATA_ROOT)
+      File.open(File.join(DATA_ROOT, "standup.json"), "a+").close
+      @report_available = false
     end
   end
 
@@ -79,8 +85,9 @@ module StandUpGuy
     end
 
     def template(file)
-      # TODO This doesn't work outside of gem dir.
-      File.read(File.join(`pwd`.chop, "lib", "StandUpGuy", file))
+      spec = Gem::Specification.find_by_name("StandUpGuy")
+      gem_root = spec.gem_dir
+      File.read(File.join(gem_root, "lib", "StandUpGuy", file))
     end
 
     def data(date = :all)
