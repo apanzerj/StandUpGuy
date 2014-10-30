@@ -8,7 +8,7 @@ describe StandUpGuy::Item do
     context "for zendesk tickets" do
       before do
         expect_zendesk("foo", "api/v2/tickets/1").
-          to_return(:headers => {"Content-Type" => "application/json"}, :body => JSON.dump({"ticket" => {"subject" => "test ticket"}}))
+          to_return(headers: {"Content-Type" => "application/json"}, body: JSON.dump("ticket" => {"subject" => "test ticket"}))
         item.add_to_today("https://foo.zendesk.com/tickets/1")
       end
 
