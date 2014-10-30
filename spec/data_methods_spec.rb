@@ -22,41 +22,29 @@ describe StandUpGuy::DataMethods do
   end
 
   describe "#filename" do
-    it{ expect(filename).to eq("standup.json")}
+    it { expect(filename).to eq(File.join(StandUpGuy::Core::DATA_ROOT, "standup.json")) }
   end
 
   describe "#load_data" do
     before do
-      @file = File.join(`pwd`.chop, "test", "standup.json")
-      File.delete(@file) if File.exists?(@file)
-      stubs(:filename => @file)
-    end
-
-    it "creates a file" do      
-      expect(File.exists?(@file)).to eq(false)
-      load_data
-      expect(File.exists?(@file)).to eq(true)
-      File.delete(File.join(`pwd`.chop, "test", "standup.json"))
+      @file = Tempfile.new("foo")
+      stubs(filename: @file.path)
     end
 
     it "reads an existing file" do
       File.write(@file, '{"foo": "bar"}')
       expect(load_data).to eq({"foo" => "bar"})
-      File.delete(File.join(`pwd`.chop, "test", "standup.json"))
-    end
-  end
-
-  describe "#write_data" do
-    before do
-      @file = File.join(`pwd`.chop, "test", "standup.json")
-      File.delete(@file) if File.exists?(@file)
-      stubs(:filename => @file)
     end
 
     it "writes the current standup" do
       write_data({"foo" => "bar"})
       expect(File.read(@file)).to eq('{"foo":"bar"}')
       File.delete(@file)
+    end
+
+    after do
+      @file.close
+      @file.unlink
     end
   end
 end

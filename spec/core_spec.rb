@@ -37,6 +37,24 @@ describe StandUpGuy::Core do
     end
   end
 
+  describe "#first_time!" do
+    before do
+      Kernel.stubs(:puts)
+      Dir.stubs(:exists?).returns(false)
+    end
+
+    it "is called when no directory exists" do
+      StandUpGuy::Core.any_instance.expects(:first_time!)
+      StandUpGuy::Core.new({})
+    end
+
+    it "creates the directory and makes the file" do
+      File.expects(:open).with(File.join(StandUpGuy::Core::DATA_ROOT, "standup.json"), "a+").returns(@file)
+      Dir.expects(:mkdir)
+      StandUpGuy::Core.new({})
+    end
+  end
+
   after do
     @file.close
     @file.unlink
