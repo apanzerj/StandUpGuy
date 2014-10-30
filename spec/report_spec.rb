@@ -38,6 +38,14 @@ describe StandUpGuy::Report do
     end
   end
 
+  describe "#mac?" do
+    subject { StandUpGuy::EmailReport.new }
+    it "tells me if I'm on a mac" do
+      host_os = Launchy::Detect::HostOs.new.host_os
+      expect(subject.mac?).to be(host_os.start_with?("darwin"))
+    end
+  end
+
   [:html, :txt, :email].each do |format|
     describe "#show" do
       subject(:report) do

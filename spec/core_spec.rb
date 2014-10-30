@@ -13,14 +13,20 @@ describe StandUpGuy::Core do
   end
 
   it "can generate a TEXT report" do
-    subject.merge!(:report => "TEXT")
+    subject.merge!(report: "TEXT")
     StandUpGuy::TextReport.expects(:new)
     StandUpGuy::Core.new(subject)
   end
 
   it "can generate an HTML report" do
-    subject.merge!(:report => "HTML")
+    subject.merge!(report: "HTML")
     StandUpGuy::HTMLReport.expects(:new)
+    StandUpGuy::Core.new(subject)
+  end
+
+  it "can generate an EMAIL report" do
+    subject.merge!(report: "EMAIL")
+    StandUpGuy::EmailReport.expects(:new)
     StandUpGuy::Core.new(subject)
   end
 

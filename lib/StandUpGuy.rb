@@ -41,7 +41,7 @@ module StandUpGuy
         item.add_to_today(options[:item])
         item.save
         date = DateTime.now.strftime("%Y-%m-%d")
-        options = {:report => "TEXT", :date => date}.merge(options)
+        options = { report: "TEXT", date: date }.merge(options)
       end
       report = begin
         case options[:report] 
@@ -49,6 +49,8 @@ module StandUpGuy
           StandUpGuy::HTMLReport.new(options[:date])
         when "TEXT"
           StandUpGuy::TextReport.new(options[:date])
+        when "EMAIL"
+          StandUpGuy::EmailReport.new(options[:date])
         else
           nil
         end
@@ -157,7 +159,7 @@ module StandUpGuy
     end
 
     def add_to_today(item)
-      @data ||= {:description=>"", :name => "", :date=>""}
+      @data ||= {description: "", name: "", date: ""}
       ticket = TicketUrl.new(item)
       if ticket.valid?
         zendesk_ticket = client(ticket.subdomain).tickets.find(:id => ticket.id)
