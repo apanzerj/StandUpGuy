@@ -5,7 +5,7 @@ require 'Standupguy/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "Standupguy"
-  spec.version       = "0.0.3"
+  spec.version       = Standupguy::VERSION
   spec.authors       = ["Adam Panzer"]
   spec.email         = ["apanzerj@gmail.com"]
   spec.summary       = %q{Manage your StandUp quickly and easily}
