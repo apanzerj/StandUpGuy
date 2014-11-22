@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Standupguy::VERSION
   spec.authors       = ["Adam Panzer"]
   spec.email         = ["apanzerj@gmail.com"]
-  spec.summary       = %q{Manage your StandUp quickly and easily}
-  spec.description   = %q{Integrating with Zendesk. Manage your daily StandUp report easily.}
-  spec.homepage      = ""
+  spec.summary       = %q{Manage your daily activity or "Stand Up" quickly and easily}
+  spec.description   = %q{Integrated with Zendesk. Manage your daily StandUp report easily.}
+  spec.homepage      = "https://github.com/apanzerj/Standupguy"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
