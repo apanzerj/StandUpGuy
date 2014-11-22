@@ -2,6 +2,7 @@ require "zendesk_api"
 require "tempfile"
 require "haml"
 require "launchy"
+require "open-uri"
 
 # StandUpGuy manages your daily standups by giving you a simple command line
 # interface to add new items. It grabs contextual information from the items
@@ -144,8 +145,10 @@ module Standupguy
     def show
       @date = !date.nil? ? date : date_key(:today)
       body = render
-      link =  "mailto:?subject=StandUp for #{date_key(:today)}" \
-              "&body=#{CGI.escape(body)}"
+      parameters = ::URI.encode_www_form([
+        ["subject", "StandUp for #{date_key(:today)}"],
+        ["body", body]])
+      link =  "mailto:?#{parameters}"
       Kernel.system("open '#{link}'") if mac?
     end
 
