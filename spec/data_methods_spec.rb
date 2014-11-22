@@ -1,8 +1,8 @@
 require "spec_helper"
-require_relative "../lib/StandUpGuy"
-include StandUpGuy::DataMethods
+require_relative "../lib/Standupguy"
+include Standupguy::DataMethods
 
-describe StandUpGuy::DataMethods do
+describe Standupguy::DataMethods do
   describe "#date_key" do
     it "returns the current date formatted string when give :today" do
       expect(date_key(:today)).to be_a_kind_of(String)
@@ -22,7 +22,10 @@ describe StandUpGuy::DataMethods do
   end
 
   describe "#filename" do
-    it { expect(filename).to eq(File.join(StandUpGuy::Core::DATA_ROOT, "standup.json")) }
+    it do
+      result = File.join(Standupguy::Core::DATA_ROOT, "standup.json")
+      expect(filename).to eq(result)
+    end
   end
 
   describe "#load_data" do

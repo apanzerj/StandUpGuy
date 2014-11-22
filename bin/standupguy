@@ -1,21 +1,21 @@
 #!/usr/bin/env ruby
-require "standupguy"
-require "optparse"
+require 'Standupguy'
+require 'optparse'
 
 options = {}
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: standupguy [options]"
+  opts.banner = 'Usage: standupguy [options]'
 
-  opts.on("-r", "--report=FORMAT", "Show an HTML report") do |r|
+  opts.on('-r', '--report=FORMAT', 'Show an HTML report') do |r|
     options[:report] = r
   end
 
-  opts.on("-d", "--date=YYYY-MM-DD", "Date of standup. ALL for all") do |date|
+  opts.on('-d', '--date=YYYY-MM-DD', 'Date of standup. ALL for all') do |date|
     options[:date] = date
   end
 end.parse!
 
-options.merge!(:item => ARGV.join(" ")) unless ARGV.empty?
+options.merge!(item: ARGV.join(' ')) unless ARGV.empty?
 
-StandUpGuy::Core.new(options)
+Standupguy::Core.new(options)

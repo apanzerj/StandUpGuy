@@ -8,7 +8,6 @@ RSpec::Core::RakeTask.new(:spec) do |task|
 end
 
 RSpec::Core::RakeTask.new(:sublime) do |task|
-  ENV['RUBYOPT'] = "-W0"
   task.rspec_opts = ['--no-color']
 end
 

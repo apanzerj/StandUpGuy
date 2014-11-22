@@ -1,16 +1,16 @@
 require "spec_helper"
-require_relative "../lib/StandUpGuy"
+require_relative "../lib/Standupguy"
 
-describe StandUpGuy::Report do
+describe Standupguy::Report do
   before do
     @datafile = create_test_file!
-    @item = StandUpGuy::Item.new
+    @item = Standupguy::Item.new
     @item.add_to_today("foob a doob")
     @item.save
   end
 
   describe "#initialize" do
-    subject(:report) { StandUpGuy::Report.new }
+    subject(:report) { Standupguy::Report.new }
 
     it "reads current standup data" do
       expect(report.current_standup[key].first["description"]).to match(@item.data[:description])
@@ -18,7 +18,7 @@ describe StandUpGuy::Report do
   end
 
   describe "#link" do
-    subject(:report) { StandUpGuy::Report.new }
+    subject(:report) { Standupguy::HTMLReport.new }
 
     it "returns a link" do
       expect(report.link).to match(%r{file:///})
@@ -26,7 +26,7 @@ describe StandUpGuy::Report do
   end
 
   describe "#data" do
-    let(:report) { StandUpGuy::Report.new }
+    let(:report) { Standupguy::Report.new }
 
     it "returns the current_standup without a date" do
       expect(report.data).to be(report.current_standup)
@@ -39,7 +39,7 @@ describe StandUpGuy::Report do
   end
 
   describe "#mac?" do
-    subject { StandUpGuy::EmailReport.new }
+    subject { Standupguy::EmailReport.new }
     it "tells me if I'm on a mac" do
       host_os = Launchy::Detect::HostOs.new.host_os
       expect(subject.mac?).to be(host_os.start_with?("darwin"))
@@ -50,18 +50,18 @@ describe StandUpGuy::Report do
     describe "#show" do
       subject(:report) do
         case format
-        when :html then StandUpGuy::HTMLReport.new
-        when :txt then StandUpGuy::TextReport.new
-        when :email then StandUpGuy::EmailReport.new
+        when :html then Standupguy::HTMLReport.new
+        when :txt then Standupguy::TextReport.new
+        when :email then Standupguy::EmailReport.new
         end
       end
 
       before do
         Launchy.stubs(:open)
-        StandUpGuy::EmailReport.any_instance.stubs(:mac?).returns(true)
+        Standupguy::EmailReport.any_instance.stubs(:mac?).returns(true)
         Kernel.stubs(:sleep)
         Kernel.stubs(:system)
-        StandUpGuy::TextReport.send(:define_method, :puts) { |*args| ""}
+        Standupguy::TextReport.send(:define_method, :puts) { |*args| "" }
       end
 
       describe format.to_s do

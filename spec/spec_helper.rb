@@ -26,9 +26,9 @@ end
 
 def stub_filename(datafile)
   path = datafile.is_a?(String) ? datafile : datafile.path
-  StandUpGuy::DataMethods.stubs(:filename).returns(path)
-  StandUpGuy::Report.any_instance.stubs(:filename).returns(path)
-  StandUpGuy::Item.any_instance.stubs(:filename).returns(path)
+  Standupguy::DataMethods.stubs(:filename).returns(path)
+  Standupguy::Report.any_instance.stubs(:filename).returns(path)
+  Standupguy::Item.any_instance.stubs(:filename).returns(path)
   datafile
 end
 

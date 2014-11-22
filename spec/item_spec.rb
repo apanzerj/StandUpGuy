@@ -1,9 +1,9 @@
 require "spec_helper"
-require_relative "../lib/StandUpGuy"
+require_relative "../lib/Standupguy"
 
-describe StandUpGuy::Item do
+describe Standupguy::Item do
   describe "#add_to_today" do
-    subject(:item) { StandUpGuy::Item.new }
+    subject(:item) { Standupguy::Item.new }
 
     context "for zendesk tickets" do
       before do
@@ -37,7 +37,7 @@ describe StandUpGuy::Item do
     end
 
     subject(:item) do
-      test_item = StandUpGuy::Item.new
+      test_item = Standupguy::Item.new
       test_item.add_to_today("foo")
       test_item
     end

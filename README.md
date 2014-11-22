@@ -1,6 +1,6 @@
-[![Coverage Status](https://img.shields.io/coveralls/apanzerj/StandUpGuy.svg)](https://coveralls.io/r/apanzerj/StandUpGuy) [![Test Status](https://travis-ci.org/apanzerj/StandUpGuy.svg?branch=master)](https://travis-ci.org/apanzerj/StandUpGuy)
+[![Coverage Status](https://img.shields.io/coveralls/apanzerj/Standupguy.svg)](https://coveralls.io/r/apanzerj/Standupguy) [![Test Status](https://travis-ci.org/apanzerj/Standupguy.svg?branch=master)](https://travis-ci.org/apanzerj/Standupguy)
 
-# StandUpGuy
+# Standupguy
 
 Quickly and easily manage your daily standup from the command line.
 
@@ -8,7 +8,7 @@ Quickly and easily manage your daily standup from the command line.
 
 Install it yourself as:
 
-    $ gem install StandUpGuy
+    $ gem install Standupguy
 
 ## Usage
   
@@ -26,7 +26,7 @@ Install it yourself as:
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/StandUpGuy/fork )
+1. Fork it ( https://github.com/[my-github-username]/Standupguy/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
