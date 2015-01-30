@@ -46,28 +46,35 @@ module Standupguy
   # in order to better test this code. Mostly init stuff.
   class Core
     DATA_ROOT = File.join(ENV["HOME"], ".standupguy")
+
+    attr_accessor :options
+
     def initialize(options)
+      @options = options
+
       first_time! unless Dir.exist?(DATA_ROOT)
 
-      if options[:item]
-        item = Standupguy::Item.new
-        item.add_to_today(options[:item])
-        item.save
-        date = DateTime.now.strftime("%Y-%m-%d")
-        options = { report: "TEXT", date: date }.merge(options)
-      end
+      @options[:date] ||= DateTime.now.strftime("%Y-%m-%d")
 
-      report(options).show unless options[:report].nil?
+      if @options[:item]
+        item = Standupguy::Item.new
+        item.add_to_today(@options[:item])
+        item.save
+      end
     end
 
-    def report(options)
-      case options[:report]
+    def show
+      report.show
+    end
+
+    def report
+      case @options[:report]
       when "HTML"
-        Standupguy::HTMLReport.new(options[:date])
-      when "TEXT"
-        Standupguy::TextReport.new(options[:date])
+        Standupguy::HTMLReport.new(@options[:date])
       when "EMAIL"
-        Standupguy::EmailReport.new(options[:date])
+        Standupguy::EmailReport.new(@options[:date])
+      else
+        Standupguy::TextReport.new(@options[:date])
       end
     end
 

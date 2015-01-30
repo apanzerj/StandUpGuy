@@ -12,22 +12,34 @@ describe Standupguy::Core do
     Standupguy::Core.new(subject)
   end
 
+  describe "defaults" do
+    subject{ Standupguy::Core.new( {} ) }
+
+    it "defaults to the current date" do
+      expect(subject.options[:date]).to eq(key)
+    end
+
+    it "defaults to a text report" do
+      expect(subject.report).to be_a_kind_of(Standupguy::TextReport)
+    end
+  end
+
   it "can generate a TEXT report" do
     subject.merge!(report: "TEXT")
     Standupguy::TextReport.any_instance.expects(:show)
-    Standupguy::Core.new(subject)
+    Standupguy::Core.new(subject).show
   end
 
   it "can generate an HTML report" do
     subject.merge!(report: "HTML")
     Standupguy::HTMLReport.any_instance.expects(:show)
-    Standupguy::Core.new(subject)
+    Standupguy::Core.new(subject).show
   end
 
   it "can generate an EMAIL report" do
     subject.merge!(report: "EMAIL")
     Standupguy::EmailReport.any_instance.expects(:show)
-    Standupguy::Core.new(subject)
+    Standupguy::Core.new(subject).show
   end
 
   describe "adding an item" do
@@ -42,7 +54,7 @@ describe Standupguy::Core do
       Standupguy::TextReport.expects(:new).
         with(DateTime.now.strftime("%Y-%m-%d")).returns(report)
       report.expects(:show)
-      Standupguy::Core.new(subject)
+      Standupguy::Core.new(subject).show
     end
   end
 

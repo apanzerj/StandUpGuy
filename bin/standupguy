@@ -8,7 +8,7 @@ OptionParser.new do |opts|
   opts.banner = 'Usage: standupguy [options]'
 
   opts.on('-r', '--report=FORMAT', 'Show an HTML report') do |r|
-    options[:report] = r
+    options[:report] = r.nil? ? "TEXT" : r.upcase
   end
 
   opts.on('-d', '--date=YYYY-MM-DD', 'Date of standup. ALL for all') do |date|
@@ -18,4 +18,4 @@ end.parse!
 
 options.merge!(item: ARGV.join(' ')) unless ARGV.empty?
 
-Standupguy::Core.new(options)
+Standupguy::Core.new(options).show
