@@ -42,6 +42,20 @@ describe Standupguy::Core do
     Standupguy::Core.new(subject).show
   end
 
+  it "can run a report from a specific date" do
+    date = "2014-01-01"
+    subject.merge!(report: "TEXT", date: date)
+    Standupguy::Report.any_instance.expects(:data).with(date).returns({date.to_sym => ["foo"]})
+    Standupguy::Core.new(subject).show
+  end
+
+  it "can be run for all dates" do
+    date = "ALL"
+    subject.merge!(report: "TEXT", date: date)
+    Standupguy::Report.any_instance.expects(:data).with(:all).returns({"2014-01-01" => ["foo"]})
+    Standupguy::Core.new(subject).show
+  end
+
   describe "adding an item" do
     it "can add an item" do
       subject.merge!(item: "Test Item", report: nil)

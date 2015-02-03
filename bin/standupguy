@@ -12,6 +12,7 @@ OptionParser.new do |opts|
   end
 
   opts.on('-d', '--date=YYYY-MM-DD', 'Date of standup. ALL for all') do |date|
+    date.upcase! if date =~ /all/i
     options[:date] = date
   end
 end.parse!
