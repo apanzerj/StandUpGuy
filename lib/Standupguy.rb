@@ -53,8 +53,9 @@ module Standupguy
       @options = options
 
       first_time! unless Dir.exist?(DATA_ROOT)
-
-      @options[:date] ||= DateTime.now.strftime("%Y-%m-%d")
+      if @options[:date] != :all && !(@options[:date] =~ /(\d){4}(-\d\d){2}/)
+        @options[:date] = DateTime.now.strftime("%Y-%m-%d")
+      end
 
       if @options[:item]
         item = Standupguy::Item.new
@@ -92,8 +93,12 @@ module Standupguy
 
     def initialize(date = nil)
       @current_standup = JSON.load(File.open(filename))
-      date ||= "ALL"
-      @date = date == "ALL" ? :all : date_key(date)
+      if date.is_a?(String)
+        date ||= "ALL"
+        @date = date == "ALL" ? :all : date_key(date)
+      else
+        @date = :all
+      end
     end
 
     def link

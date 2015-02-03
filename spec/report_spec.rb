@@ -28,10 +28,6 @@ describe Standupguy::Report do
   describe "#data" do
     let(:report) { Standupguy::Report.new }
 
-    it "returns the current_standup without a date" do
-      expect(report.data).to be(report.current_standup)
-    end
-
     it "returns scoped data when passed a date" do
       report.instance_variable_set(:@current_standup, {"2014-10-10"=>["foo"], "2014-10-11"=>[nil]})
       expect(report.data("2014-10-10").first).to eq(["2014-10-10", ["foo"]])

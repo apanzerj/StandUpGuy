@@ -50,9 +50,9 @@ describe Standupguy::Core do
   end
 
   it "can be run for all dates" do
-    date = "ALL"
+    date = :all
     subject.merge!(report: "TEXT", date: date)
-    Standupguy::Report.any_instance.expects(:data).with(:all).returns({"2014-01-01" => ["foo"]})
+    Standupguy::Report.any_instance.expects(:data).with(date).returns({"2014-01-01" => ["foo"]})
     Standupguy::Core.new(subject).show
   end
 
