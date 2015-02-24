@@ -176,25 +176,47 @@ module Standupguy
     attr_accessor :data
 
     def method_missing(method, *args)
-      return unless [:description=, :name=, :date=].include?(method)
+      method_list = [:description=, :name=, :date=, :ticket_id=]
+      return unless method_list.include?(method)
       method = method.to_s.chop.to_sym
       @data[method] = args.first
+    end
+
+    def continue?
+      puts <<-EOS
+This ticket has already been added. Do you want to continue adding it? (y/N)
+      EOS
+      STDIN.gets.downcase.chomp[0] == "y"
     end
 
     def save
       current_standup = load_data
       current_standup ||= { date_key => [] }
       data_exists = current_standup.keys.include?(date_key)
-      current_standup[date_key] = [] unless data_exists
+      begin
+        if data_exists && !!@data[:ticket_id]
+          ticket_list = current_standup[date_key]
+          ticket_list.map! { |item| item["ticket_id"] }
+          unless ticket_list.empty?
+            already_added = ticket_list.include?(@data[:ticket_id])
+            raise "Already added" if already_added
+          end
+        end
+      rescue RuntimeError
+        return unless continue?
+      end
+
+      current_standup[date_key] ||= []
       current_standup[date_key] << @data
       write_data(current_standup)
     end
 
     def add_to_today(item)
-      @data ||= { description: "", name: "", date: "" }
+      @data ||= { description: "", date: "", ticket_id: false }
       ticket = TicketUrl.new(item)
       if ticket.valid?
         zendesk_ticket = client(ticket.subdomain).tickets.find(id: ticket.id)
+        self.ticket_id = item
         self.description = "#{item} => (#{zendesk_ticket.subject})"
       else
         self.description = item
