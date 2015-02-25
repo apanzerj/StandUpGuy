@@ -196,7 +196,7 @@ This ticket has already been added. Do you want to continue adding it? (y/N)
       begin
         if data_exists && !!@data[:ticket_id]
           ticket_list = current_standup[date_key]
-          ticket_list.map! { |item| item["ticket_id"] }
+          ticket_list = ticket_list.map{ |item| item["ticket_id"] }
           unless ticket_list.empty?
             already_added = ticket_list.include?(@data[:ticket_id])
             raise "Already added" if already_added
