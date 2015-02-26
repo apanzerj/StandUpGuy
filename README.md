@@ -14,15 +14,26 @@ Install it yourself as:
   
 ### Adding an item
 
+Automatically looks up your ticket subject for Zendesk Tickets. You need to have your username and api key in your ENV. zendesk_user / zendesk_pass
+
     $ standupguy https://foo.zendesk.com/tickets/2
 
     $ standupguy I did a thing today
 
 ### Viewing your standup
 
-    $ standupguy --report TEXT
+Text based: 
+    
+    $ standupguy 
+    $ standupguy -r TEXT
+    
+HTML Report
 
     $ standupguy --report HTML
+    
+Email Report (Mac OS Only)
+
+    $ standupguy --retort EMAIL
 
 ## Contributing
 
